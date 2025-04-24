@@ -27,7 +27,7 @@ export default function LearningPage() {
       <SideNav />
       <Header />
 
-      <main className="ml-64 pt-16 p-6">
+      <main className="ml-64 pt-20 p-6">
         <div className="mb-8">
           <h1 className="text-3xl font-bold">Learning Center</h1>
           <p className="text-muted-foreground">

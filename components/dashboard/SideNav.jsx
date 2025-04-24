@@ -18,8 +18,8 @@ export function SideNav() {
   const navItems = [
     { label: 'Dashboard', href: '/', icon: Home },
     { label: 'Employees', href: '/employees', icon: Users },
-    { label: 'Performance', href: '/performance', icon: BarChart3 },
-    { label: 'Recommendations', href: '/recommendations', icon: Award },
+    // { label: 'Performance', href: '/performance', icon: BarChart3 },
+    // { label: 'Recommendations', href: '/recommendations', icon: Award },
     { label: 'Projects', href: '/projects', icon: Target },
     { label: 'AI Insights', href: '/insights', icon: BrainCircuit },
     { label: 'Learning', href: '/learning', icon: BookOpen }

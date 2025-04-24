@@ -1,28 +1,28 @@
 "use client";
 
-import { Header } from '@/components/dashboard/Header';
-import { SideNav } from '@/components/dashboard/SideNav';
-import { Badge } from '@/components/ui/badge';
+import { Header } from "@/components/dashboard/Header";
+import { SideNav } from "@/components/dashboard/SideNav";
+import { Badge } from "@/components/ui/badge";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
-import { CSPSolver } from '@/lib/algorithms/csp-solver';
-import { FOLEvaluator } from '@/lib/algorithms/fol-evaluator';
-import { GoalRecommender } from '@/lib/algorithms/goal-recommender';
-import { employeeData, projectData } from '@/lib/data';
+import { CSPSolver } from "@/lib/algorithms/csp-solver";
+import { FOLEvaluator } from "@/lib/algorithms/fol-evaluator";
+import { GoalRecommender } from "@/lib/algorithms/goal-recommender";
+import { employeeData, projectData } from "@/lib/data";
 import {
-    AlertTriangle,
-    BrainCircuit,
-    Layers,
-    Network,
-    Target,
-    Workflow
-} from 'lucide-react';
-import { useEffect, useState } from 'react';
+  AlertTriangle,
+  BrainCircuit,
+  Layers,
+  Network,
+  Target,
+  Workflow,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function InsightsPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -265,7 +265,7 @@ export default function InsightsPage() {
       <SideNav />
       <Header />
 
-      <main className="ml-64 pt-16 p-6">
+      <main className="ml-64 pt-20 p-6">
         <div className="mb-8">
           <h1 className="text-3xl font-bold">AI Insights</h1>
           <p className="text-muted-foreground">
@@ -434,7 +434,7 @@ else if (priority === "Low") goalValue *= 0.7`}</pre>
                               key={skill}
                               className="flex items-center justify-between text-sm p-2 bg-red-50 border border-red-100 rounded-md"
                             >
-                              <span>{skill}</span>
+                              <span className="text-black">{skill}</span>
                               <Badge variant="destructive">
                                 Only {data.count} qualified
                               </Badge>

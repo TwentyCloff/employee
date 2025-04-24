@@ -30,7 +30,7 @@ export default function ProjectsPage() {
       <SideNav />
       <Header />
       
-      <main className="ml-64 pt-16 p-6">
+      <main className="ml-64 pt-20 p-6">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold">Project Management</h1>
@@ -63,8 +63,8 @@ export default function ProjectsPage() {
               Object.values(skillCoverage).length * 100;
             
             return (
-              <Card key={project.id} className="overflow-hidden">
-                <CardHeader className="border-b bg-muted/50">
+              <Card key={project.id} className="overflow-hidden gap-0 p-0">
+                <CardHeader className="border-b bg-muted/50 pt-6">
                   <div className="flex justify-between items-center">
                     <div>
                       <CardTitle>{project.name}</CardTitle>

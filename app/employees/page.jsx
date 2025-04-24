@@ -247,7 +247,7 @@ export default function EmployeesPage() {
       <SideNav />
       <Header />
       
-      <main className="ml-64 pt-16 p-6">
+      <main className="ml-64 pt-20 p-6">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
           <div>
             <h1 className="text-3xl font-bold">Employees</h1>

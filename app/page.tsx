@@ -70,8 +70,8 @@ export default function Page() {
           </div>
         </div>
       </div> */}
-      <div className="ml-64 pt-20 p-6">
-        <div className="flex flex-col gap-8 w-full">
+      <div className="ml-64 pt-24 p-6">
+        <div className="flex flex-col gap-2 w-full">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <AIInsightCard
               type="promotion"
