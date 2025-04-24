@@ -5,8 +5,25 @@ import "./globals.css";
 import { geistMono, inter } from "@/lib/fonts";
 
 export const metadata: Metadata = {
-  title: "ui-animation-challenges",
-  description: "A collection of UI animation challenges.",
+  title: "Employee Performance Evaluation",
+  description: "AI Mini Project",
+  icons: {
+    icon: "/window.svg",
+  },
+  themeColor: "#000000",
+  openGraph: {
+    title: "Employee Performance Evaluation",
+    description: "AI Mini Project",
+    url: "https://employee-performance-evaluation-beta.vercel.app/",
+    siteName: "Employee Performance Evaluation",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
