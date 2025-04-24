@@ -1,9 +1,48 @@
-import { GithubIcon, XIcon } from "@/components/icons";
+"use client";
+import { AIInsightCard } from "@/components/dashboard/AIInsightCard";
+import { EmployeeList } from "@/components/dashboard/EmployeeList";
+import { ProjectAssignmentCard } from "@/components/dashboard/ProjectAssignmentCard";
+import { GithubIcon } from "@/components/icons";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { CSPSolver } from '@/lib/algorithms/csp-solver';
+import { FOLEvaluator } from '@/lib/algorithms/fol-evaluator';
+import { employeeData, projectData } from '@/lib/data';
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Page() {
+  const [promotionCandidates, setPromotionCandidates] = useState({});
+  const [trainingNeeds, setTrainingNeeds] = useState<Record<string, { needsTraining: boolean; areas: string[] }>>({});
+  const [performanceScores, setPerformanceScores] = useState({});
+  const [projectAssignments, setProjectAssignments] = useState({});
+
+  useEffect(() => {
+    // Apply First Order Logic to evaluate employees
+    const folEvaluator = new FOLEvaluator(employeeData);
+    setPromotionCandidates(folEvaluator.evaluateRule('isPromotionCandidate'));
+
+    // Get training needs
+    const trainingResults: any = {};
+    employeeData.forEach(employee => {
+      trainingResults[employee.id] = folEvaluator.needsTraining(employee);
+    });
+    setTrainingNeeds(trainingResults);
+
+    // Calculate performance scores
+    setPerformanceScores(folEvaluator.calculatePerformanceScores());
+
+    // Apply CSP to assign employees to projects
+    const cspSolver = new CSPSolver(employeeData, projectData);
+    setProjectAssignments(cspSolver.solve());
+  }, []);
+
+  // Count employees by department
+  const departmentCounts = employeeData.reduce((counts: Record<string, number>, employee) => {
+    counts[employee.department] = (counts[employee.department] || 0) + 1;
+    return counts;
+  }, {} as Record<string, number>);
   return (
     <div className="flex flex-col h-full">
       <div className="border-b border-border border-dashed sticky top-0 bg-site-background/80 backdrop-blur-md z-50">
@@ -35,19 +74,85 @@ export default function Page() {
         <div className="px-4 py-12 max-w-screen-xl w-full mx-auto border-border border-dashed xl:border-x flex flex-col lg:flex-row items-center gap-x-4 gap-y-12 lg:justify-between">
           <div className="flex lg:flex-row flex-col gap-8">
             <div className="flex flex-col gap-8 w-full">
-              <div className="flex justify-between items-center gap-4">
-                <div className="space-y-8">
-                  {/* <h1 className="text-5xl lg:text-6xl font-[538] tracking-[-0.03em] drop-shadow-xs text-center lg:text-left">
-                    Employee Performance<br className="hidden lg:block" />
-                    Evaluation
-                  </h1>
-                  <div className="*:text-lg leading-none *:lg:text-xl *:tracking-[-0.01em] *:font-[410] text-neutral-800 dark:text-neutral-300 flex flex-col gap-1 text-center lg:text-left">
-                    <span>
-                      5-day immersive challenge where you&apos;ll tackle
-                    </span>
-                    <span>and solve a daily animation challenge.</span>
-                  </div> */}
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <AIInsightCard
+                  type="promotion"
+                  title="Promotion Candidates"
+                  description="Employees who are ready for advancement"
+                  data={
+                    <div className="mt-4">
+                      {Object.entries(promotionCandidates).filter(([_, value]) => value).length > 0 ? (
+                        <ul className="space-y-2">
+                          {Object.entries(promotionCandidates)
+                            .filter(([_, value]) => value)
+                            .map(([employeeId]) => {
+                              const employee = employeeData.find(e => e.id === parseInt(employeeId));
+                              return employee ? (
+                                <li key={employeeId} className="flex items-center space-x-2 text-sm">
+                                  <span className="h-2 w-2 rounded-full bg-green-500" />
+                                  <span>{employee.name} ({employee.role})</span>
+                                </li>
+                              ) : null;
+                            })}
+                        </ul>
+                      ) : (
+                        <p className="text-sm">No promotion candidates identified at this time.</p>
+                      )}
+                    </div>
+                  }
+                />
+                <AIInsightCard
+                  type="training"
+                  title="Training Needs"
+                  description="Areas where employees need development"
+                  data={
+                    <div className="mt-4">
+                      {Object.entries(trainingNeeds).filter(([_, value]) => (value as { needsTraining: boolean }).needsTraining).length > 0 ? (
+                        <ul className="space-y-2">
+                          {Object.entries(trainingNeeds)
+                            .filter(([_, value]) => value.needsTraining)
+                            .map(([employeeId, data]) => {
+                              const employee = employeeData.find(e => e.id === parseInt(employeeId));
+                              return employee ? (
+                                <li key={employeeId} className="text-sm">
+                                  <span className="font-medium">{employee.name}:</span> {data.areas.map(area => area.replace(/([A-Z])/g, ' $1').trim()).join(', ')}
+                                </li>
+                              ) : null;
+                            })}
+                        </ul>
+                      ) : (
+                        <p className="text-sm">No urgent training needs identified.</p>
+                      )}
+                    </div>
+                  }
+                />
+
+                <AIInsightCard
+                  type="insight"
+                  title="Department Overview"
+                  description="Employee distribution by department"
+                  data={
+                    <div className="mt-4">
+                      <ul className="space-y-2">
+                        {Object.entries(departmentCounts).map(([dept, count]) => (
+                          <li key={dept} className="flex items-center justify-between text-sm">
+                            <span>{dept}</span>
+                            <Badge variant="outline">{count} {count === 1 ? 'employee' : 'employees'}</Badge>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  }
+                />
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <EmployeeList employees={employeeData} performanceScores={performanceScores} />
+                <ProjectAssignmentCard
+                  assignments={projectAssignments}
+                  employees={employeeData}
+                  projects={projectData}
+                />
               </div>
             </div>
           </div>

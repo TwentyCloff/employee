@@ -40,7 +40,7 @@ export function PerformanceSummary({ employee }) {
           <div>
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium">Overall Performance</span>
-              <span className="text-sm font-medium">{averagePerformance.toFixed(1)}%</span>
+              <span className="text-sm font-medium">{averagePerformance?.toFixed(1)}%</span>
             </div>
             <Progress value={averagePerformance} className="h-2" />
           </div>
@@ -60,7 +60,7 @@ export function PerformanceSummary({ employee }) {
           <div className="flex items-center pt-2 border-t">
             <TrendIcon className={`h-4 w-4 mr-2 ${trend.color}`} />
             <span className="text-sm">
-              {trend.text} ({latestReview.toFixed(1)} vs {previousReview.toFixed(1)})
+              {trend.text} ({latestReview?.toFixed(1)} vs {previousReview?.toFixed(1)})
             </span>
           </div>
         </div>

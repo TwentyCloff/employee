@@ -1,6 +1,6 @@
-import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
+import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
@@ -11,6 +11,12 @@ const badgeVariants = cva(
       variant: {
         default:
           "border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90",
+        success:
+          "border-transparent bg-green-600/40 text-success-foreground [a&]:hover:bg-success/90",
+        info:
+          "border-transparent bg-gray-600/40 text-info-foreground [a&]:hover:bg-info/90",
+        warning:
+          "border-transparent bg-yellow-600/40 text-warning-foreground [a&]:hover:bg-warning/90",
         secondary:
           "border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90",
         destructive:
