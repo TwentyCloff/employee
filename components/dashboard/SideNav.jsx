@@ -21,8 +21,8 @@ export function SideNav() {
     // { label: 'Performance', href: '/performance', icon: BarChart3 },
     // { label: 'Recommendations', href: '/recommendations', icon: Award },
     { label: 'Projects', href: '/projects', icon: Target },
-    { label: 'AI Insights', href: '/insights', icon: BrainCircuit },
-    { label: 'Learning', href: '/learning', icon: BookOpen }
+    // { label: 'AI Insights', href: '/insights', icon: BrainCircuit },
+    // { label: 'Learning', href: '/learning', icon: BookOpen }
   ];
 
   return (

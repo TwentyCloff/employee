@@ -432,9 +432,9 @@ else if (priority === "Low") goalValue *= 0.7`}</pre>
                           .map(([skill, data]) => (
                             <div
                               key={skill}
-                              className="flex items-center justify-between text-sm p-2 bg-red-50 border border-red-100 rounded-md"
+                              className="flex items-center justify-between text-sm p-2 bg-red-700/10 border border-red-700/15 rounded-md"
                             >
-                              <span className="text-black">{skill}</span>
+                              <span>{skill}</span>
                               <Badge variant="destructive">
                                 Only {data.count} qualified
                               </Badge>
