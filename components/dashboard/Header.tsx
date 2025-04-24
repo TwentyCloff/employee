@@ -4,6 +4,7 @@ import {
   Bell,
   Settings
 } from 'lucide-react';
+import { Input } from '../ui/input';
 
 export function Header() {
   return (
@@ -11,7 +12,7 @@ export function Header() {
       <div className="flex items-center">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <input 
+          <Input 
             type="text" 
             placeholder="Search..." 
             className="h-10 w-64 rounded-md border border-input bg-background px-10 text-sm"

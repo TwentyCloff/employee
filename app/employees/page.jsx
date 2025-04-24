@@ -11,6 +11,7 @@ import {
   CardHeader, 
   CardTitle 
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -81,7 +82,7 @@ function EmployeeFilters({
       <div className="w-full md:w-auto">
         <label className="text-sm font-medium mb-1 block">Performance Range</label>
         <div className="flex items-center space-x-2">
-          <input 
+          <Input 
             type="number" 
             min="0" 
             max="100" 
@@ -90,7 +91,7 @@ function EmployeeFilters({
             className="h-9 w-16 rounded-md border border-input bg-background px-3 text-sm"
           />
           <span>-</span>
-          <input 
+          <Input 
             type="number" 
             min="0" 
             max="100" 
@@ -274,7 +275,7 @@ export default function EmployeesPage() {
         <div className="mb-6">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <input 
+            <Input 
               type="text" 
               placeholder="Search employees by name, role, or department..." 
               value={searchQuery}
