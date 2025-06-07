@@ -21,7 +21,7 @@ export function SideNav() {
     { label: 'Absensi', href: '/performance', icon: BarChart3 },
     { label: 'Daftar piket', href: '/recommendations', icon: Award },
     { label: 'Galery', href: '/insights', icon: BrainCircuit },
-    { label: 'Achievement', href: '/projects', icon: Target },
+    { label: 'Achievement', href: '/projects', icon: Target }
     //{ label: 'gg', href: '/learning', icon: BookOpen }
     //{ label: '', href: '/projects', icon: Target },
   ];
