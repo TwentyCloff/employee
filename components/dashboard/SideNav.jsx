@@ -28,7 +28,7 @@ export function SideNav() {
   return (
     <div className="h-screen w-64 border-r bg-background fixed left-0 top-0">
       <div className="p-6">
-        <h1 className="text-2xl font-bold">SMANPUL</h1>
+        <h1 className="text-2xl font-bold">SMAN 10 PTK</h1>
         <p className="text-sm text-muted-foreground">Billingual Class</p>
       </div>
       
