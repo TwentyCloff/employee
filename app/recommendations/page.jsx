@@ -12,51 +12,103 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FOLEvaluator } from "@/lib/algorithms/fol-evaluator";
-import { GoalRecommender } from "@/lib/algorithms/goal-recommender";
-import { employeeData } from "@/lib/data";
 import {
-    AlertCircle,
+    Calendar,
     CheckCircle,
     Clock,
-    Lightbulb,
-    School
+    Users,
+    ClipboardList
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export default function RecommendationsPage() {
-  const [promotionCandidates, setPromotionCandidates] = useState({});
-  const [trainingNeeds, setTrainingNeeds] = useState({});
-  const [recommendedGoals, setRecommendedGoals] = useState({});
+// Student data for duty roster
+const studentData = [
+  { id: 1, name: 'Alicia Shofi Destiani' },
+  { id: 2, name: 'Dahlia Puspita Ghaniaty' },
+  { id: 3, name: 'Dara Veronika Tariggas' },
+  { id: 4, name: 'Fairuz Sahla Fallugah' },
+  { id: 5, name: 'Farid Ulya Firjatullah' },
+  { id: 6, name: 'Fathul Faigan Alfi' },
+  { id: 7, name: 'Fredy Gabriell Tanjaya' },
+  { id: 8, name: 'Juliandika' },
+  { id: 9, name: 'Kalinda Pradipa' },
+  { id: 10, name: 'Kania Permata Widra' },
+  { id: 11, name: 'Keisya Ramadhani Huuriyah' },
+  { id: 12, name: 'Kenzo Alvaro Bautista' },
+  { id: 13, name: 'Keysha Aulia' },
+  { id: 14, name: 'Kiran Adhya Narisha' },
+  { id: 15, name: 'Muhammad Fakhar' },
+  { id: 16, name: 'Nadine Rannu Gracia' },
+  { id: 17, name: 'Rahadatul Aisy Hadraini' },
+  { id: 18, name: 'Raden Mecca Puti A' },
+  { id: 19, name: 'Raisya Permata Intania W' },
+  { id: 20, name: 'Salsabiela Azzahra B' },
+  { id: 21, name: 'Sandi Gunawan' },
+  { id: 22, name: 'Shabrina Aqela' },
+  { id: 23, name: 'Syaira Parifasha' },
+  { id: 24, name: 'Syifa Azzahra Rifai' },
+  { id: 25, name: 'Utin Muzfira Amira Fenisa' },
+];
 
-  useEffect(() => {
-    const folEvaluator = new FOLEvaluator(employeeData);
-    setPromotionCandidates(folEvaluator.evaluateRule("isPromotionCandidate"));
+// Initial duty roster assignment
+const initialDutyRoster = {
+  Monday: [
+    { id: 1, name: 'Alicia Shofi Destiani', present: true },
+    { id: 2, name: 'Dahlia Puspita Ghaniaty', present: true },
+    { id: 3, name: 'Dara Veronika Tariggas', present: true },
+  ],
+  Tuesday: [
+    { id: 4, name: 'Fairuz Sahla Fallugah', present: true },
+    { id: 5, name: 'Farid Ulya Firjatullah', present: true },
+    { id: 6, name: 'Fathul Faigan Alfi', present: true },
+  ],
+  Wednesday: [
+    { id: 7, name: 'Fredy Gabriell Tanjaya', present: true },
+    { id: 8, name: 'Juliandika', present: true },
+    { id: 9, name: 'Kalinda Pradipa', present: true },
+  ],
+  Thursday: [
+    { id: 10, name: 'Kania Permata Widra', present: true },
+    { id: 11, name: 'Keisya Ramadhani Huuriyah', present: true },
+    { id: 12, name: 'Kenzo Alvaro Bautista', present: true },
+  ],
+  Friday: [
+    { id: 13, name: 'Keysha Aulia', present: true },
+    { id: 14, name: 'Kiran Adhya Narisha', present: true },
+    { id: 15, name: 'Muhammad Fakhar', present: true },
+  ],
+};
 
-    const trainingResults = {};
-    employeeData.forEach((employee) => {
-      trainingResults[employee.id] = folEvaluator.needsTraining(employee);
-    });
-    setTrainingNeeds(trainingResults);
+export default function DutyRosterPage() {
+  const [dutyRoster, setDutyRoster] = useState(initialDutyRoster);
+  const [availableStudents, setAvailableStudents] = useState(studentData);
 
-    const goalRecommender = new GoalRecommender(employeeData);
-    const goals = {};
-    employeeData.forEach((employee) => {
-      goals[employee.id] = goalRecommender.recommendGoals(employee.id, 3);
-    });
-    setRecommendedGoals(goals);
-  }, []);
-
-  const statusIcons = {
-    Completed: { icon: CheckCircle, color: "text-green-500" },
-    "In Progress": { icon: Clock, color: "text-yellow-500" },
-    "Not Started": { icon: AlertCircle, color: "text-red-500" },
+  const toggleAttendance = (day, studentId) => {
+    setDutyRoster(prev => ({
+      ...prev,
+      [day]: prev[day].map(student => 
+        student.id === studentId 
+          ? { ...student, present: !student.present } 
+          : student
+      )
+    }));
   };
 
-  const priorityColors = {
-    High: "destructive",
-    Medium: "warning",
-    Low: "info",
+  const addStudentToDay = (day, studentId) => {
+    const studentToAdd = availableStudents.find(s => s.id === studentId);
+    if (studentToAdd) {
+      setDutyRoster(prev => ({
+        ...prev,
+        [day]: [...prev[day], { ...studentToAdd, present: true }]
+      }));
+    }
+  };
+
+  const removeStudentFromDay = (day, studentId) => {
+    setDutyRoster(prev => ({
+      ...prev,
+      [day]: prev[day].filter(student => student.id !== studentId)
+    }));
   };
 
   return (
@@ -66,239 +118,349 @@ export default function RecommendationsPage() {
 
       <main className="ml-64 pt-16 p-6">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold">AI Recommendations</h1>
+          <h1 className="text-3xl font-bold">Daftar Piket Kelas</h1>
           <p className="text-muted-foreground">
-            Data-driven insights and recommendations for team optimization.
+            Pengaturan jadwal piket harian untuk kelas XA
           </p>
         </div>
 
-        <Tabs defaultValue="goals">
+        <Tabs defaultValue="senin">
           <TabsList className="mb-6">
-            <TabsTrigger value="goals">Development Goals</TabsTrigger>
-            <TabsTrigger value="promotions">Promotion Candidates</TabsTrigger>
-            <TabsTrigger value="training">Training Needs</TabsTrigger>
+            <TabsTrigger value="senin">
+              <Calendar className="h-4 w-4 mr-2" />
+              Senin
+            </TabsTrigger>
+            <TabsTrigger value="selasa">
+              <Calendar className="h-4 w-4 mr-2" />
+              Selasa
+            </TabsTrigger>
+            <TabsTrigger value="rabu">
+              <Calendar className="h-4 w-4 mr-2" />
+              Rabu
+            </TabsTrigger>
+            <TabsTrigger value="kamis">
+              <Calendar className="h-4 w-4 mr-2" />
+              Kamis
+            </TabsTrigger>
+            <TabsTrigger value="jumat">
+              <Calendar className="h-4 w-4 mr-2" />
+              Jumat
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="goals">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {employeeData.map((employee) => {
-                const goals = recommendedGoals[employee.id] || [];
-
-                return (
-                  <Card key={employee.id}>
-                    <CardHeader className="pb-2">
-                      <CardTitle className="flex items-center">
-                        <Lightbulb className="h-5 w-5 mr-2 text-blue-500" />
-                        {employee.name}
-                      </CardTitle>
-                      <CardDescription>{employee.role}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        <div className="text-sm">
-                          <p className="mb-2 font-medium">Current Goals:</p>
-                          <ul className="space-y-2">
-                            {employee.goals.map((goal) => {
-                              const StatusIcon = statusIcons[goal.status].icon;
-
-                              return (
-                                <li
-                                  key={goal.id}
-                                  className="flex items-center justify-between p-2 border rounded-md"
-                                >
-                                  <div className="flex items-center">
-                                    <StatusIcon
-                                      className={`h-4 w-4 mr-2 ${
-                                        statusIcons[goal.status].color
-                                      }`}
-                                    />
-                                    <span>{goal.description}</span>
-                                  </div>
-                                  <Badge
-                                    variant={priorityColors[goal.priority]}
-                                  >
-                                    {goal.priority}
-                                  </Badge>
-                                </li>
-                              );
-                            })}
-                          </ul>
-                        </div>
-
-                        <div className="text-sm">
-                          <p className="mb-2 font-medium">Recommended Goals:</p>
-                          {goals.length > 0 ? (
-                            <ul className="space-y-2">
-                              {goals.map((goal) => (
-                                <li
-                                  key={goal.id}
-                                  className="flex items-center justify-between p-2 border rounded-md"
-                                >
-                                  <div className="flex items-center">
-                                    <AlertCircle className="h-4 w-4 mr-2 text-blue-500" />
-                                    <span>{goal.description}</span>
-                                  </div>
-                                  <Badge
-                                    variant={priorityColors[goal.priority]}
-                                  >
-                                    {goal.priority}
-                                  </Badge>
-                                </li>
-                              ))}
-                            </ul>
-                          ) : (
-                            <>
-                              <p className="text-muted-foreground">
-                                No promotion candidates identified at this time.
-                              </p>
-                              <p className="text-sm max-w-md mt-2">
-                                Employees need to meet all criteria: high
-                                performance, improvement over time, and project
-                                reliability.
-                              </p>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-
-            {/* Promotion Criteria Card */}
+          <TabsContent value="senin">
             <Card>
               <CardHeader>
-                <CardTitle>Promotion Criteria</CardTitle>
+                <CardTitle className="flex items-center">
+                  <Users className="h-5 w-5 mr-2 text-blue-500" />
+                  Piket Hari Senin
+                </CardTitle>
                 <CardDescription>
-                  How promotion candidates are identified
+                  Daftar siswa yang bertugas pada hari Senin
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="font-medium mb-2">High Performance</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Employee must maintain an average performance score of 85%
-                      or higher across all metrics.
-                    </p>
-                  </div>
+                <div className="space-y-4">
+                  {dutyRoster.Monday.map(student => (
+                    <div key={student.id} className="flex items-center justify-between p-3 border rounded-md">
+                      <div className="flex items-center">
+                        {student.present ? (
+                          <CheckCircle className="h-4 w-4 mr-2 text-green-500" />
+                        ) : (
+                          <Clock className="h-4 w-4 mr-2 text-yellow-500" />
+                        )}
+                        <span>{student.name}</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => toggleAttendance('Monday', student.id)}
+                        >
+                          {student.present ? 'Absen' : 'Hadir'}
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => removeStudentFromDay('Monday', student.id)}
+                        >
+                          Hapus
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
 
-                  <div>
-                    <h3 className="font-medium mb-2">Improvement Over Time</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Employee must show improvement in review scores between
-                      their first and most recent performance review.
-                    </p>
-                  </div>
-
-                  <div>
-                    <h3 className="font-medium mb-2">Project Reliability</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Employee must complete at least 75% of their projects on
-                      time.
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t">
-                    <h3 className="font-medium mb-2">
-                      First Order Logic Implementation
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      This dashboard uses First Order Logic to evaluate if an
-                      employee is a promotion candidate:
-                    </p>
-                    <pre className="text-xs bg-muted p-3 rounded-md mt-2 overflow-x-auto">
-                      {`isPromotionCandidate(employee) :-
-  isHighPerformer(employee) AND
-  hasImprovedOverTime(employee) AND
-  isReliable(employee).`}
-                    </pre>
-                  </div>
+                <div className="mt-6">
+                  <h3 className="font-medium mb-3">Tambah Siswa</h3>
+                  <select 
+                    className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+                    onChange={(e) => addStudentToDay('Monday', parseInt(e.target.value))}
+                  >
+                    <option value="">Pilih siswa...</option>
+                    {availableStudents
+                      .filter(s => !dutyRoster.Monday.some(ds => ds.id === s.id))
+                      .map(student => (
+                        <option key={student.id} value={student.id}>
+                          {student.name}
+                        </option>
+                      ))}
+                  </select>
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
 
-          <TabsContent value="training">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {employeeData.map((employee) => {
-                const training = trainingNeeds[employee.id] || {
-                  needsTraining: false,
-                  areas: [],
-                };
+          <TabsContent value="selasa">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Users className="h-5 w-5 mr-2 text-blue-500" />
+                  Piket Hari Selasa
+                </CardTitle>
+                <CardDescription>
+                  Daftar siswa yang bertugas pada hari Selasa
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {dutyRoster.Tuesday.map(student => (
+                    <div key={student.id} className="flex items-center justify-between p-3 border rounded-md">
+                      <div className="flex items-center">
+                        {student.present ? (
+                          <CheckCircle className="h-4 w-4 mr-2 text-green-500" />
+                        ) : (
+                          <Clock className="h-4 w-4 mr-2 text-yellow-500" />
+                        )}
+                        <span>{student.name}</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => toggleAttendance('Tuesday', student.id)}
+                        >
+                          {student.present ? 'Absen' : 'Hadir'}
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => removeStudentFromDay('Tuesday', student.id)}
+                        >
+                          Hapus
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
 
-                return (
-                  <Card
-                    key={employee.id}
-                    className={
-                      training.needsTraining
-                        ? "border-amber-200 shadow-amber-100/20"
-                        : ""
-                    }
+                <div className="mt-6">
+                  <h3 className="font-medium mb-3">Tambah Siswa</h3>
+                  <select 
+                    className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+                    onChange={(e) => addStudentToDay('Tuesday', parseInt(e.target.value))}
                   >
-                    <CardHeader className="pb-2">
-                      <CardTitle className="flex items-center">
-                        <School
-                          className={`h-5 w-5 mr-2 ${
-                            training.needsTraining
-                              ? "text-amber-500"
-                              : "text-green-500"
-                          }`}
-                        />
-                        {employee.name}
-                      </CardTitle>
-                      <CardDescription>{employee.role}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      {training.needsTraining ? (
-                        <div>
-                          <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-md">
-                            <p className="text-sm font-medium text-amber-800">
-                              Training recommended in the following areas:
-                            </p>
-                          </div>
-                          <ul className="space-y-2">
-                            {training.areas.map((area) => (
-                              <li
-                                key={area}
-                                className="flex items-center p-2 border rounded-md"
-                              >
-                                <AlertCircle className="h-4 w-4 mr-2 text-amber-500" />
-                                <span className="text-sm capitalize">
-                                  {area.replace(/([A-Z])/g, " $1").trim()}
-                                </span>
-                              </li>
-                            ))}
-                          </ul>
-                          <div className="mt-4">
-                            <Button
-                              size="sm"
-                              className="w-full"
-                              variant="outline"
-                            >
-                              Schedule Training
-                            </Button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div>
-                          <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-md">
-                            <p className="text-sm font-medium text-green-800">
-                              No training needs identified at this time.
-                            </p>
-                          </div>
-                          <p className="text-sm text-muted-foreground">
-                            All performance metrics are above the 80% threshold.
-                            Continue to monitor performance.
-                          </p>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
+                    <option value="">Pilih siswa...</option>
+                    {availableStudents
+                      .filter(s => !dutyRoster.Tuesday.some(ds => ds.id === s.id))
+                      .map(student => (
+                        <option key={student.id} value={student.id}>
+                          {student.name}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="rabu">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Users className="h-5 w-5 mr-2 text-blue-500" />
+                  Piket Hari Rabu
+                </CardTitle>
+                <CardDescription>
+                  Daftar siswa yang bertugas pada hari Rabu
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {dutyRoster.Wednesday.map(student => (
+                    <div key={student.id} className="flex items-center justify-between p-3 border rounded-md">
+                      <div className="flex items-center">
+                        {student.present ? (
+                          <CheckCircle className="h-4 w-4 mr-2 text-green-500" />
+                        ) : (
+                          <Clock className="h-4 w-4 mr-2 text-yellow-500" />
+                        )}
+                        <span>{student.name}</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => toggleAttendance('Wednesday', student.id)}
+                        >
+                          {student.present ? 'Absen' : 'Hadir'}
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => removeStudentFromDay('Wednesday', student.id)}
+                        >
+                          Hapus
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-6">
+                  <h3 className="font-medium mb-3">Tambah Siswa</h3>
+                  <select 
+                    className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+                    onChange={(e) => addStudentToDay('Wednesday', parseInt(e.target.value))}
+                  >
+                    <option value="">Pilih siswa...</option>
+                    {availableStudents
+                      .filter(s => !dutyRoster.Wednesday.some(ds => ds.id === s.id))
+                      .map(student => (
+                        <option key={student.id} value={student.id}>
+                          {student.name}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="kamis">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Users className="h-5 w-5 mr-2 text-blue-500" />
+                  Piket Hari Kamis
+                </CardTitle>
+                <CardDescription>
+                  Daftar siswa yang bertugas pada hari Kamis
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {dutyRoster.Thursday.map(student => (
+                    <div key={student.id} className="flex items-center justify-between p-3 border rounded-md">
+                      <div className="flex items-center">
+                        {student.present ? (
+                          <CheckCircle className="h-4 w-4 mr-2 text-green-500" />
+                        ) : (
+                          <Clock className="h-4 w-4 mr-2 text-yellow-500" />
+                        )}
+                        <span>{student.name}</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => toggleAttendance('Thursday', student.id)}
+                        >
+                          {student.present ? 'Absen' : 'Hadir'}
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => removeStudentFromDay('Thursday', student.id)}
+                        >
+                          Hapus
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-6">
+                  <h3 className="font-medium mb-3">Tambah Siswa</h3>
+                  <select 
+                    className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+                    onChange={(e) => addStudentToDay('Thursday', parseInt(e.target.value))}
+                  >
+                    <option value="">Pilih siswa...</option>
+                    {availableStudents
+                      .filter(s => !dutyRoster.Thursday.some(ds => ds.id === s.id))
+                      .map(student => (
+                        <option key={student.id} value={student.id}>
+                          {student.name}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="jumat">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Users className="h-5 w-5 mr-2 text-blue-500" />
+                  Piket Hari Jumat
+                </CardTitle>
+                <CardDescription>
+                  Daftar siswa yang bertugas pada hari Jumat
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {dutyRoster.Friday.map(student => (
+                    <div key={student.id} className="flex items-center justify-between p-3 border rounded-md">
+                      <div className="flex items-center">
+                        {student.present ? (
+                          <CheckCircle className="h-4 w-4 mr-2 text-green-500" />
+                        ) : (
+                          <Clock className="h-4 w-4 mr-2 text-yellow-500" />
+                        )}
+                        <span>{student.name}</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => toggleAttendance('Friday', student.id)}
+                        >
+                          {student.present ? 'Absen' : 'Hadir'}
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => removeStudentFromDay('Friday', student.id)}
+                        >
+                          Hapus
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-6">
+                  <h3 className="font-medium mb-3">Tambah Siswa</h3>
+                  <select 
+                    className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+                    onChange={(e) => addStudentToDay('Friday', parseInt(e.target.value))}
+                  >
+                    <option value="">Pilih siswa...</option>
+                    {availableStudents
+                      .filter(s => !dutyRoster.Friday.some(ds => ds.id === s.id))
+                      .map(student => (
+                        <option key={student.id} value={student.id}>
+                          {student.name}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
       </main>
