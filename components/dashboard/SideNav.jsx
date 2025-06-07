@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+"use client";
+
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -8,16 +9,24 @@ import {
   Home,
   Award,
   Target,
-  BrainCircuit,
-  BookOpen,
-  Menu,
-  X
+  BrainCircuit
 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export function SideNav() {
   const pathname = usePathname();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsCollapsed(window.innerWidth < 768);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const navItems = [
     { label: 'Dashboard', href: '/', icon: Home },
     { label: 'Siswa', href: '/employees', icon: Users },
@@ -28,91 +37,51 @@ export function SideNav() {
   ];
 
   return (
-    <>
-      {/* Mobile Menu Button */}
-      <div className="lg:hidden fixed top-4 left-4 z-50">
-        <button 
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="p-2 rounded-md bg-primary text-white"
-        >
-          {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+    <div className={cn(
+      "h-screen border-r bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60",
+      "fixed left-0 top-0 z-20",
+      "transition-all duration-300 ease-in-out",
+      isCollapsed ? "w-16" : "w-64"
+    )}>
+      <div className={cn(
+        "p-4 border-b",
+        isCollapsed ? "px-3" : "px-6"
+      )}>
+        {isCollapsed ? (
+          <h1 className="text-xl font-bold text-center">10</h1>
+        ) : (
+          <>
+            <h1 className="text-2xl font-bold">SMAN 10 PTK</h1>
+            <p className="text-sm text-muted-foreground">Billingual Class</p>
+          </>
+        )}
       </div>
-
-      {/* Desktop Sidebar */}
-      <div className="hidden lg:block h-screen w-64 border-r bg-background fixed left-0 top-0">
-        <div className="p-6">
-          <h1 className="text-2xl font-bold">SMAN 10 PTK</h1>
-          <p className="text-sm text-muted-foreground">Billingual Class</p>
-        </div>
-        
-        <nav className="space-y-1 px-2">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
-            const Icon = item.icon;
-            
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "flex items-center px-4 py-3 text-sm font-medium rounded-md",
-                  isActive 
-                    ? "bg-primary/10 text-primary" 
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                )}
-              >
-                <Icon className="h-5 w-5 mr-3" />
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
-      </div>
-
-      {/* Mobile Sidebar */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 bg-black bg-opacity-50">
-          <div className="h-full w-64 bg-background shadow-lg">
-            <div className="p-6 flex justify-between items-center">
-              <div>
-                <h1 className="text-2xl font-bold">SMAN 10 PTK</h1>
-                <p className="text-sm text-muted-foreground">Billingual Class</p>
-              </div>
-              <button 
-                onClick={() => setMobileMenuOpen(false)}
-                className="p-2 rounded-md text-muted-foreground"
-              >
-                <X className="h-6 w-6" />
-              </button>
-            </div>
-            
-            <nav className="space-y-1 px-2">
-              {navItems.map((item) => {
-                const isActive = pathname === item.href;
-                const Icon = item.icon;
-                
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={cn(
-                      "flex items-center px-4 py-3 text-sm font-medium rounded-md",
-                      isActive 
-                        ? "bg-primary/10 text-primary" 
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                    )}
-                  >
-                    <Icon className="h-5 w-5 mr-3" />
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </nav>
-          </div>
-        </div>
-      )}
-    </>
+      
+      <nav className="space-y-1 p-2">
+        {navItems.map((item) => {
+          const isActive = pathname === item.href;
+          const Icon = item.icon;
+          
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                "flex items-center py-3 text-sm font-medium rounded-md",
+                "transition-colors duration-200",
+                isCollapsed ? "px-2 justify-center" : "px-4",
+                isActive 
+                  ? "bg-primary/10 text-primary" 
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              )}
+              title={isCollapsed ? item.label : undefined}
+            >
+              <Icon className="h-5 w-5 flex-shrink-0" />
+              {!isCollapsed && <span className="ml-3 truncate">{item.label}</span>}
+            </Link>
+          );
+        })}
+      </nav>
+    </div>
   );
 }
