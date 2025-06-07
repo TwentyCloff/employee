@@ -2,6 +2,8 @@
 
 import { Header } from "@/components/dashboard/Header";
 import { SideNav } from "@/components/dashboard/SideNav";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -10,9 +12,16 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar, Users } from "lucide-react";
+import {
+    Calendar,
+    CheckCircle,
+    Clock,
+    Users,
+    ClipboardList
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
-// Student data for duty roster - EDIT THIS TO CHANGE STUDENTS
+// Student data for duty roster
 const studentData = [
   { id: 1, name: 'Alicia Shofi Destiani' },
   { id: 2, name: 'Dahlia Puspita Ghaniaty' },
@@ -41,7 +50,7 @@ const studentData = [
   { id: 25, name: 'Utin Muzfira Amira Fenisa' },
 ];
 
-// Initial duty roster assignment - EDIT THIS TO CHANGE SCHEDULE
+// Initial duty roster assignment
 const initialDutyRoster = {
   Monday: [
     { id: 1, name: 'Alicia Shofi Destiani' },
@@ -132,10 +141,13 @@ export default function DutyRosterPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {dutyRoster.Monday.map(student => (
-                    <div key={student.id} className="p-3 border rounded-md">
-                      {student.name}
+                    <div key={student.id} className="flex items-center justify-between p-3 border rounded-md">
+                      <div className="flex items-center">
+                        <CheckCircle className="h-4 w-4 mr-2 text-green-500" />
+                        <span>{student.name}</span>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -155,10 +167,13 @@ export default function DutyRosterPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {dutyRoster.Tuesday.map(student => (
-                    <div key={student.id} className="p-3 border rounded-md">
-                      {student.name}
+                    <div key={student.id} className="flex items-center justify-between p-3 border rounded-md">
+                      <div className="flex items-center">
+                        <CheckCircle className="h-4 w-4 mr-2 text-green-500" />
+                        <span>{student.name}</span>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -178,10 +193,13 @@ export default function DutyRosterPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {dutyRoster.Wednesday.map(student => (
-                    <div key={student.id} className="p-3 border rounded-md">
-                      {student.name}
+                    <div key={student.id} className="flex items-center justify-between p-3 border rounded-md">
+                      <div className="flex items-center">
+                        <CheckCircle className="h-4 w-4 mr-2 text-green-500" />
+                        <span>{student.name}</span>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -201,10 +219,13 @@ export default function DutyRosterPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {dutyRoster.Thursday.map(student => (
-                    <div key={student.id} className="p-3 border rounded-md">
-                      {student.name}
+                    <div key={student.id} className="flex items-center justify-between p-3 border rounded-md">
+                      <div className="flex items-center">
+                        <CheckCircle className="h-4 w-4 mr-2 text-green-500" />
+                        <span>{student.name}</span>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -224,10 +245,13 @@ export default function DutyRosterPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {dutyRoster.Friday.map(student => (
-                    <div key={student.id} className="p-3 border rounded-md">
-                      {student.name}
+                    <div key={student.id} className="flex items-center justify-between p-3 border rounded-md">
+                      <div className="flex items-center">
+                        <CheckCircle className="h-4 w-4 mr-2 text-green-500" />
+                        <span>{student.name}</span>
+                      </div>
                     </div>
                   ))}
                 </div>
