@@ -248,7 +248,7 @@ export default function StudentsPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input 
               type="text" 
-              placeholder="Search students by name, class, or status..." 
+              placeholder="Search students by name..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="h-10 w-full rounded-md border border-input bg-background px-10 text-sm"
