@@ -17,7 +17,7 @@ export function SideNav() {
   
   const navItems = [
     { label: 'Dashboard', href: '/', icon: Home },
-    { label: 'Member', href: '/employees', icon: Users },
+    { label: 'Siswa', href: '/employees', icon: Users },
     { label: 'Absensi', href: '/performance', icon: BarChart3 },
     { label: 'Daftar piket', href: '/recommendations', icon: Award },
     { label: 'Galery', href: '/insights', icon: BrainCircuit },
