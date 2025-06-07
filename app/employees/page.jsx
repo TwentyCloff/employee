@@ -1,4 +1,4 @@
-// app/employees/page.jsx
+// app/students/page.jsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -22,85 +22,82 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { FOLEvaluator } from '@/lib/algorithms/fol-evaluator';
-import { employeeData } from '@/lib/data';
 import { 
   Eye, 
   Search, 
   ChevronLeft, 
   ChevronRight,
-  Filter,
   X,
-  Plus,
-  Download,
-  Upload
 } from 'lucide-react';
 import Link from 'next/link';
 
-// components/employees/EmployeeFilters.jsx
-function EmployeeFilters({ 
-  departments, 
-  roles, 
-  selectedDepartment, 
-  selectedRole, 
-  performanceRange, 
-  setSelectedDepartment, 
-  setSelectedRole, 
-  setPerformanceRange, 
+// Student data sorted alphabetically
+const studentData = [
+  { id: 1, name: 'Alicia Shofi Destiani', class: 'XA', status: 'Siswa' },
+  { id: 2, name: 'Dahlia Puspita Ghaniaty', class: 'XA', status: 'Siswa' },
+  { id: 3, name: 'Dara Veronika Tariggas', class: 'XA', status: 'Siswa' },
+  { id: 4, name: 'Fairuz Sahla Fallugah', class: 'XA', status: 'Siswa' },
+  { id: 5, name: 'Farid Ulya Firjatullah', class: 'XA', status: 'Siswa' },
+  { id: 6, name: 'Fathul Faigan Alfi', class: 'XA', status: 'Siswa' },
+  { id: 7, name: 'Fredy Gabriell Tanjaya', class: 'XA', status: 'Siswa' },
+  { id: 8, name: 'Juliandika', class: 'XA', status: 'Siswa' },
+  { id: 9, name: 'Kalinda Pradipa', class: 'XA', status: 'Siswa' },
+  { id: 10, name: 'Kania Permata Widra', class: 'XA', status: 'Siswa' },
+  { id: 11, name: 'Keisya Ramadhani Huuriyah', class: 'XA', status: 'Siswa' },
+  { id: 12, name: 'Kenzo Alvaro Bautista', class: 'XA', status: 'Siswa' },
+  { id: 13, name: 'Keysha Aulia', class: 'XA', status: 'Siswa' },
+  { id: 14, name: 'Kiran Adhya Narisha', class: 'XA', status: 'Siswa' },
+  { id: 15, name: 'Muhammad Fakhar', class: 'XA', status: 'Siswa' },
+  { id: 16, name: 'Nadine Rannu Gracia', class: 'XA', status: 'Siswa' },
+  { id: 17, name: 'Rahadatul Aisy Hadraini', class: 'XA', status: 'Siswa' },
+  { id: 18, name: 'Raden Mecca Puti A', class: 'XA', status: 'Siswa' },
+  { id: 19, name: 'Raisya Permata Intania W', class: 'XA', status: 'Siswa' },
+  { id: 20, name: 'Salsabiela Azzahra B', class: 'XA', status: 'Siswa' },
+  { id: 21, name: 'Sandi Gunawan', class: 'XA', status: 'Siswa' },
+  { id: 22, name: 'Shabrina Aqela', class: 'XA', status: 'Siswa' },
+  { id: 23, name: 'Syaira Parifasha', class: 'XA', status: 'Siswa' },
+  { id: 24, name: 'Syifa Azzahra Rifai', class: 'XA', status: 'Siswa' },
+  { id: 25, name: 'Utin Muzfira Amira Fenisa', class: 'XA', status: 'Siswa' },
+];
+
+// components/students/StudentFilters.jsx
+function StudentFilters({ 
+  classes, 
+  statuses, 
+  selectedClass, 
+  selectedStatus, 
+  setSelectedClass, 
+  setSelectedStatus, 
   resetFilters 
 }) {
   return (
     <div className="flex flex-col md:flex-row items-start md:items-center gap-4 p-4 bg-muted/30 rounded-md mb-6">
       <div className="w-full md:w-auto">
-        <label className="text-sm font-medium mb-1 block">Department</label>
+        <label className="text-sm font-medium mb-1 block">Class</label>
         <select 
-          value={selectedDepartment} 
-          onChange={(e) => setSelectedDepartment(e.target.value)}
+          value={selectedClass} 
+          onChange={(e) => setSelectedClass(e.target.value)}
           className="h-9 w-full md:w-40 rounded-md border border-input bg-background px-3 text-sm"
         >
-          <option value="">All Departments</option>
-          {departments.map(dept => (
-            <option key={dept} value={dept}>{dept}</option>
+          <option value="">All Classes</option>
+          {classes.map(cls => (
+            <option key={cls} value={cls}>{cls}</option>
           ))}
         </select>
       </div>
       
       <div className="w-full md:w-auto">
-        <label className="text-sm font-medium mb-1 block">Role</label>
+        <label className="text-sm font-medium mb-1 block">Status</label>
         <select 
-          value={selectedRole} 
-          onChange={(e) => setSelectedRole(e.target.value)}
+          value={selectedStatus} 
+          onChange={(e) => setSelectedStatus(e.target.value)}
           className="h-9 w-full md:w-48 rounded-md border border-input bg-background px-3 text-sm"
         >
-          <option value="">All Roles</option>
-          {roles.map(role => (
-            <option key={role} value={role}>{role}</option>
+          <option value="">All Statuses</option>
+          {statuses.map(status => (
+            <option key={status} value={status}>{status}</option>
           ))}
         </select>
-      </div>
-      
-      <div className="w-full md:w-auto">
-        <label className="text-sm font-medium mb-1 block">Performance Range</label>
-        <div className="flex items-center space-x-2">
-          <Input 
-            type="number" 
-            min="0" 
-            max="100" 
-            value={performanceRange[0]} 
-            onChange={(e) => setPerformanceRange([parseInt(e.target.value), performanceRange[1]])}
-            className="h-9 w-16 rounded-md border border-input bg-background px-3 text-sm"
-          />
-          <span>-</span>
-          <Input 
-            type="number" 
-            min="0" 
-            max="100" 
-            value={performanceRange[1]} 
-            onChange={(e) => setPerformanceRange([performanceRange[0], parseInt(e.target.value)])}
-            className="h-9 w-16 rounded-md border border-input bg-background px-3 text-sm"
-          />
-          <span className="text-sm">%</span>
-        </div>
       </div>
       
       <div className="ml-auto mt-4 md:mt-auto flex items-center space-x-2">
@@ -113,8 +110,8 @@ function EmployeeFilters({
   );
 }
 
-// components/employees/EmployeePagination.jsx
-function EmployeePagination({ 
+// components/students/StudentPagination.jsx
+function StudentPagination({ 
   currentPage, 
   totalPages, 
   setCurrentPage, 
@@ -127,7 +124,7 @@ function EmployeePagination({
       <div className="text-sm text-muted-foreground mb-4 md:mb-0">
         Showing <span className="font-medium">{Math.min((currentPage - 1) * itemsPerPage + 1, totalItems)}</span> to{' '}
         <span className="font-medium">{Math.min(currentPage * itemsPerPage, totalItems)}</span> of{' '}
-        <span className="font-medium">{totalItems}</span> employees
+        <span className="font-medium">{totalItems}</span> students
       </div>
       
       <div className="flex items-center space-x-4">
@@ -173,12 +170,11 @@ function EmployeePagination({
   );
 }
 
-export default function EmployeesPage() {
+export default function StudentsPage() {
   // State for search and filters
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedDepartment, setSelectedDepartment] = useState('');
-  const [selectedRole, setSelectedRole] = useState('');
-  const [performanceRange, setPerformanceRange] = useState([0, 100]);
+  const [selectedClass, setSelectedClass] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('');
   
   // State for pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -187,41 +183,32 @@ export default function EmployeesPage() {
   // State for filtered and paginated data
   const [filteredData, setFilteredData] = useState([]);
   const [paginatedData, setPaginatedData] = useState([]);
-  const [performanceScores, setPerformanceScores] = useState({});
   
-  // Extract unique departments and roles for filters
-  const departments = [...new Set(employeeData.map(emp => emp.department))];
-  const roles = [...new Set(employeeData.map(emp => emp.role))];
+  // Extract unique classes and statuses for filters
+  const classes = [...new Set(studentData.map(student => student.class))];
+  const statuses = [...new Set(studentData.map(student => student.status))];
   
   useEffect(() => {
-    // Calculate performance scores
-    const folEvaluator = new FOLEvaluator(employeeData);
-    setPerformanceScores(folEvaluator.calculatePerformanceScores());
-    
     // Apply filters and search
-    const filtered = employeeData.filter(employee => {
+    const filtered = studentData.filter(student => {
       // Search filter
       const matchesSearch = searchQuery === '' || 
-        employee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        employee.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        employee.department.toLowerCase().includes(searchQuery.toLowerCase());
+        student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        student.class.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        student.status.toLowerCase().includes(searchQuery.toLowerCase());
       
-      // Department filter
-      const matchesDepartment = selectedDepartment === '' || employee.department === selectedDepartment;
+      // Class filter
+      const matchesClass = selectedClass === '' || student.class === selectedClass;
       
-      // Role filter
-      const matchesRole = selectedRole === '' || employee.role === selectedRole;
+      // Status filter
+      const matchesStatus = selectedStatus === '' || student.status === selectedStatus;
       
-      // Performance range filter
-      const employeeScore = performanceScores[employee.id] || 0;
-      const matchesPerformance = employeeScore >= performanceRange[0] && employeeScore <= performanceRange[1];
-      
-      return matchesSearch && matchesDepartment && matchesRole && matchesPerformance;
+      return matchesSearch && matchesClass && matchesStatus;
     });
     
     setFilteredData(filtered);
     setCurrentPage(1); // Reset to first page when filters change
-  }, [searchQuery, selectedDepartment, selectedRole, performanceRange]);
+  }, [searchQuery, selectedClass, selectedStatus]);
   
   useEffect(() => {
     // Paginate data
@@ -236,9 +223,8 @@ export default function EmployeesPage() {
   // Reset all filters
   const resetFilters = () => {
     setSearchQuery('');
-    setSelectedDepartment('');
-    setSelectedRole('');
-    setPerformanceRange([0, 100]);
+    setSelectedClass('');
+    setSelectedStatus('');
     setCurrentPage(1);
   };
   
@@ -250,25 +236,10 @@ export default function EmployeesPage() {
       <main className="ml-64 pt-20 p-6">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
           <div>
-            <h1 className="text-3xl font-bold">Employees</h1>
+            <h1 className="text-3xl font-bold">Students</h1>
             <p className="text-muted-foreground">
-              View and manage all employees in your organization.
+              View and manage all students in your class.
             </p>
-          </div>
-          
-          <div className="flex items-center space-x-2 mt-4 md:mt-0">
-            <Button variant="outline">
-              <Upload className="h-4 w-4 mr-2" />
-              Import
-            </Button>
-            <Button variant="outline">
-              <Download className="h-4 w-4 mr-2" />
-              Export
-            </Button>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Employee
-            </Button>
           </div>
         </div>
         
@@ -277,7 +248,7 @@ export default function EmployeesPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input 
               type="text" 
-              placeholder="Search employees by name, role, or department..." 
+              placeholder="Search students by name, class, or status..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="h-10 w-full rounded-md border border-input bg-background px-10 text-sm"
@@ -293,49 +264,39 @@ export default function EmployeesPage() {
           </div>
         </div>
         
-        <EmployeeFilters 
-          departments={departments} 
-          roles={roles} 
-          selectedDepartment={selectedDepartment} 
-          selectedRole={selectedRole} 
-          performanceRange={performanceRange} 
-          setSelectedDepartment={setSelectedDepartment} 
-          setSelectedRole={setSelectedRole} 
-          setPerformanceRange={setPerformanceRange} 
+        <StudentFilters 
+          classes={classes} 
+          statuses={statuses} 
+          selectedClass={selectedClass} 
+          selectedStatus={selectedStatus} 
+          setSelectedClass={setSelectedClass} 
+          setSelectedStatus={setSelectedStatus} 
           resetFilters={resetFilters} 
         />
         
         <Card>
           <CardHeader className="pb-0">
             <div className="flex items-center justify-between">
-              <CardTitle>Employee Directory</CardTitle>
+              <CardTitle>Student Directory</CardTitle>
               <Badge variant="outline">
-                {filteredData.length} employees
+                {filteredData.length} students
               </Badge>
             </div>
-            {(selectedDepartment || selectedRole || performanceRange[0] > 0 || performanceRange[1] < 100) && (
+            {(selectedClass || selectedStatus) && (
               <div className="flex items-center flex-wrap gap-2 mt-2">
                 <Badge variant="secondary" className="text-xs">Filters active</Badge>
-                {selectedDepartment && (
+                {selectedClass && (
                   <Badge variant="outline" className="text-xs">
-                    Department: {selectedDepartment}
-                    <button onClick={() => setSelectedDepartment('')} className="ml-1">
+                    Class: {selectedClass}
+                    <button onClick={() => setSelectedClass('')} className="ml-1">
                       <X className="h-3 w-3" />
                     </button>
                   </Badge>
                 )}
-                {selectedRole && (
+                {selectedStatus && (
                   <Badge variant="outline" className="text-xs">
-                    Role: {selectedRole}
-                    <button onClick={() => setSelectedRole('')} className="ml-1">
-                      <X className="h-3 w-3" />
-                    </button>
-                  </Badge>
-                )}
-                {(performanceRange[0] > 0 || performanceRange[1] < 100) && (
-                  <Badge variant="outline" className="text-xs">
-                    Performance: {performanceRange[0]}% - {performanceRange[1]}%
-                    <button onClick={() => setPerformanceRange([0, 100])} className="ml-1">
+                    Status: {selectedStatus}
+                    <button onClick={() => setSelectedStatus('')} className="ml-1">
                       <X className="h-3 w-3" />
                     </button>
                   </Badge>
@@ -348,70 +309,41 @@ export default function EmployeesPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Name</TableHead>
-                  <TableHead>Role</TableHead>
-                  <TableHead>Department</TableHead>
-                  <TableHead>Start Date</TableHead>
-                  <TableHead>Performance</TableHead>
-                  <TableHead>Projects</TableHead>
-                  <TableHead>Training Needs</TableHead>
+                  <TableHead>Class</TableHead>
+                  <TableHead>Status</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {paginatedData.map(employee => {
-                  // Calculate training needs
-                  const folEvaluator = new FOLEvaluator([employee]);
-                  const trainingNeeds = folEvaluator.needsTraining(employee);
-                  
-                  return (
-                    <TableRow key={employee.id}>
-                      <TableCell className="font-medium">{employee.name}</TableCell>
-                      <TableCell>{employee.role}</TableCell>
-                      <TableCell>{employee.department}</TableCell>
-                      <TableCell>{new Date(employee.startDate).toLocaleDateString()}</TableCell>
-                      <TableCell>
-                        <Badge 
-                          variant={
-                            performanceScores[employee.id] >= 90 ? "success" : 
-                            performanceScores[employee.id] >= 80 ? "info" :
-                            performanceScores[employee.id] >= 70 ? "warning" :
-                            "destructive"
-                          }
-                        >
-                          {performanceScores[employee.id]?.toFixed(1)}%
-                        </Badge>
-                      </TableCell>
-                      <TableCell>{employee.projects.length}</TableCell>
-                      <TableCell>
-                        {trainingNeeds.needsTraining ? (
-                          <Badge variant="warning">{trainingNeeds.areas.length} areas</Badge>
-                        ) : (
-                          <Badge variant="success">None</Badge>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Link href={`/employee/${employee.id}`}>
-                          <Button size="sm" variant="ghost">
-                            <Eye className="h-4 w-4 mr-1" />
-                            View
-                          </Button>
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                {paginatedData.map(student => (
+                  <TableRow key={student.id}>
+                    <TableCell className="font-medium">{student.name}</TableCell>
+                    <TableCell>{student.class}</TableCell>
+                    <TableCell>
+                      <Badge variant="secondary">{student.status}</Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Link href={`/student/${student.id}`}>
+                        <Button size="sm" variant="ghost">
+                          <Eye className="h-4 w-4 mr-1" />
+                          View
+                        </Button>
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                ))}
                 
                 {paginatedData.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
-                      No employees found matching your filters.
+                    <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
+                      No students found matching your filters.
                     </TableCell>
                   </TableRow>
                 )}
               </TableBody>
             </Table>
             
-            <EmployeePagination 
+            <StudentPagination 
               currentPage={currentPage}
               totalPages={totalPages}
               setCurrentPage={setCurrentPage}
