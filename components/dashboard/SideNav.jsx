@@ -28,8 +28,8 @@ export function SideNav() {
   return (
     <div className="h-screen w-64 border-r bg-background fixed left-0 top-0">
       <div className="p-6">
-        <h1 className="text-2xl font-bold">PerformAI</h1>
-        <p className="text-sm text-muted-foreground">Employee Evaluation</p>
+        <h1 className="text-2xl font-bold">SMANPUL</h1>
+        <p className="text-sm text-muted-foreground">Billingual Class</p>
       </div>
       
       <nav className="space-y-1 px-2">
