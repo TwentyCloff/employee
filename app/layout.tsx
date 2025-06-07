@@ -1,8 +1,9 @@
-
 import { ThemeProvider } from "@/providers/theme-provider";
 import type { Metadata } from "next";
 import "./globals.css";
 import { geistMono, inter } from "@/lib/fonts";
+import { SideNav } from "@/components/dashboard/SideNav";
+import { MainContent } from "@/components/dashboard/MainContent";
 
 export const metadata: Metadata = {
   title: "Employee Performance Evaluation",
@@ -34,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${geistMono.variable} font-sans antialiased bg-site-background min-h-svh`}
+        className={`${inter.variable} ${geistMono.variable} font-sans antialiased bg-background text-foreground`}
       >
         <ThemeProvider
           attribute="class"
@@ -42,7 +43,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <div className="flex">
+            <SideNav />
+            <MainContent>
+              {children}
+            </MainContent>
+          </div>
         </ThemeProvider>
       </body>
     </html>
