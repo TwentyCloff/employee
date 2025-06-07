@@ -1,59 +1,82 @@
 # Employee Performance Evaluation Dashboard
 
-## Overview
 
-A comprehensive employee performance evaluation system that uses artificial intelligence and constraint satisfaction techniques to analyze performance, optimize project assignments, and recommend personalized development goals.
-
-## Key Features
-
-### First Order Logic (FOL) Implementation
-- Used for performance evaluation rules and criteria
-- Determines promotion candidates based on logical predicates
-- Identifies training needs by analyzing performance metrics
-
-### Constraint Satisfaction Problem (CSP) Solver
-- Optimally assigns employees to projects based on skills
-- Ensures constraints like skill requirements and team balance are met
-- Maximizes overall project success probability
-
-### Heuristic Backtracking
-- Recommends personalized development goals for employees
-- Uses heuristics to calculate the value of each potential goal
-- Prioritizes goals based on improvement potential and importance
-
-### Modern UI with shadcn Components
-- Clean, responsive dashboard layout
-- Interactive data visualizations
-- Tabbed interfaces for organized information
-
-## Pages Included
-
-- **Dashboard** - Overview of key metrics and insights
-- **Employee Detail** - In-depth view of individual employee performance
-- **Performance Analysis** - Comprehensive metrics breakdown
-- **Project Management** - CSP-optimized project assignments
-- **Recommendations** - AI-generated goals and training suggestions
-- **AI Insights** - Advanced analytics and organizational insights
-- **Learning Center** - Educational resource about the algorithms
-
-## Technical Implementation
-
-The dashboard is built with:
-- Next.js for the framework
-- Tailwind CSS for styling
-- shadcn/ui components for the interface elements
-- React hooks for state management
-- Custom algorithm implementations for FOL, CSP, and heuristic backtracking
-
-All algorithms are modular and reusable, making it easy to extend the dashboard with additional features or modify the evaluation criteria.
-
-## Getting Started
-
-To run this dashboard:
-
-1. Set up a Next.js project
-2. Install the required dependencies
-3. Copy the component structure and code
-4. Start the development server with `npm run dev`
-
-This implementation is flexible enough to handle real JSON data by simply replacing the sample data in the `lib/data.js` file with your actual employee data.
+````bash
+📁 employee/
+├── .gitignore
+├── components.json
+├── next.config.ts
+├── package-lock.json
+├── package.json
+├── postcss.config.mjs
+├── README.md
+├── struktur.txt
+├── tsconfig.json
+│
+├── 📁 app/
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── layout.tsx
+│   ├── page.tsx
+│   ├── 📁 employee/
+│   │   └── 📁 [id]/
+│   │       └── page.jsx
+│   ├── 📁 employees/
+│   │   └── page.jsx
+│   ├── 📁 insights/
+│   │   └── page.jsx
+│   ├── 📁 learning/
+│   │   └── page.jsx
+│   ├── 📁 performance/
+│   │   └── page.jsx
+│   ├── 📁 projects/
+│   │   └── page.jsx
+│   └── 📁 recommendations/
+│       └── page.jsx
+│
+├── 📁 components/
+│   ├── fade-blur-container.tsx
+│   ├── icons.tsx
+│   ├── theme-toggle.tsx
+│   ├── 📁 dashboard/
+│   │   ├── AIInsightCard.jsx
+│   │   ├── EmployeeList.jsx
+│   │   ├── GoalsOverview.jsx
+│   │   ├── Header.tsx
+│   │   ├── PerformanceSummary.jsx
+│   │   ├── ProjectAssignmentCard.jsx
+│   │   ├── ProjectsTable.jsx
+│   │   ├── SideNav.jsx
+│   │   └── SkillsRadar.jsx
+│   └── 📁 ui/
+│       ├── badge.tsx
+│       ├── button.tsx
+│       ├── card.tsx
+│       ├── dropdown-menu.tsx
+│       ├── input.tsx
+│       ├── progress.tsx
+│       ├── shared-layout-tabs.tsx
+│       ├── spinner.tsx
+│       ├── table.tsx
+│       └── tabs.tsx
+│
+├── 📁 lib/
+│   ├── data.js
+│   ├── fonts.ts
+│   ├── utils.ts
+│   └── 📁 algorithms/
+│       ├── csp-solver.js
+│       ├── fol-evaluator.js
+│       └── goal-recommender.js
+│
+├── 📁 providers/
+│   └── theme-provider.tsx
+│
+└── 📁 public/
+    ├── file.svg
+    ├── globe.svg
+    ├── next.svg
+    ├── og-image.png
+    ├── vercel.svg
+    └── window.svg
+````
