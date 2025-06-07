@@ -22,14 +22,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { 
-  Eye, 
   Search, 
   ChevronLeft, 
   ChevronRight,
   X,
-  Pencil,
 } from 'lucide-react';
-import Link from 'next/link';
 
 // Student data sorted alphabetically with roles
 const studentData = [
@@ -184,38 +181,10 @@ export default function StudentsPage() {
   const [filteredData, setFilteredData] = useState([]);
   const [paginatedData, setPaginatedData] = useState([]);
   
-  // State for editing role
-  const [editingRoleId, setEditingRoleId] = useState(null);
-  const [tempRole, setTempRole] = useState('');
-  
   // Extract unique classes and roles for filters
   const classes = [...new Set(studentData.map(student => student.class))];
   const roles = ['Siswa', 'Ketua Kelas', 'Wakil Ketua', 'Sekretaris', 'Bendahara 1', 'Bendahara 2'];
   
-  // Handle role update
-  const handleRoleUpdate = (id) => {
-    const updatedData = studentData.map(student => {
-      if (student.id === id) {
-        return { ...student, role: tempRole };
-      }
-      return student;
-    });
-    
-    setFilteredData(updatedData.filter(student => {
-      const matchesSearch = searchQuery === '' || 
-        student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        student.class.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        student.role.toLowerCase().includes(searchQuery.toLowerCase());
-      
-      const matchesClass = selectedClass === '' || student.class === selectedClass;
-      const matchesRole = selectedRole === '' || student.role === selectedRole;
-      
-      return matchesSearch && matchesClass && matchesRole;
-    }));
-    
-    setEditingRoleId(null);
-  };
-
   useEffect(() => {
     // Apply filters and search
     const filtered = studentData.filter(student => {
@@ -339,7 +308,6 @@ export default function StudentsPage() {
                   <TableHead>Name</TableHead>
                   <TableHead>Class</TableHead>
                   <TableHead>Role</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -348,74 +316,24 @@ export default function StudentsPage() {
                     <TableCell className="font-medium">{student.name}</TableCell>
                     <TableCell>{student.class}</TableCell>
                     <TableCell>
-                      {editingRoleId === student.id ? (
-                        <div className="flex items-center gap-2">
-                          <select
-                            value={tempRole}
-                            onChange={(e) => setTempRole(e.target.value)}
-                            className="h-8 rounded-md border border-input bg-background px-2 text-sm"
-                          >
-                            {roles.map(role => (
-                              <option key={role} value={role}>{role}</option>
-                            ))}
-                          </select>
-                          <Button 
-                            size="sm" 
-                            onClick={() => handleRoleUpdate(student.id)}
-                            className="h-8"
-                          >
-                            Save
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            onClick={() => setEditingRoleId(null)}
-                            className="h-8"
-                          >
-                            Cancel
-                          </Button>
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-2">
-                          <Badge 
-                            variant={
-                              student.role === 'Ketua Kelas' ? 'default' :
-                              student.role === 'Wakil Ketua' ? 'secondary' :
-                              student.role === 'Sekretaris' ? 'outline' :
-                              student.role.includes('Bendahara') ? 'destructive' : 
-                              'secondary'
-                            }
-                          >
-                            {student.role}
-                          </Badge>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-6 w-6"
-                            onClick={() => {
-                              setEditingRoleId(student.id);
-                              setTempRole(student.role);
-                            }}
-                          >
-                            <Pencil className="h-3 w-3" />
-                          </Button>
-                        </div>
-                      )}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Link href={`/student/${student.id}`}>
-                        <Button size="sm" variant="ghost">
-                          <Eye className="h-4 w-4 mr-1" />
-                          View
-                        </Button>
-                      </Link>
+                      <Badge 
+                        variant={
+                          student.role === 'Ketua Kelas' ? 'default' :
+                          student.role === 'Wakil Ketua' ? 'secondary' :
+                          student.role === 'Sekretaris' ? 'outline' :
+                          student.role.includes('Bendahara') ? 'destructive' : 
+                          'secondary'
+                        }
+                      >
+                        {student.role}
+                      </Badge>
                     </TableCell>
                   </TableRow>
                 ))}
                 
                 {paginatedData.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">
                       No students found matching your filters.
                     </TableCell>
                   </TableRow>
